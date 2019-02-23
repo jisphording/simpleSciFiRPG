@@ -13,13 +13,26 @@ Furthermore this is mainly a learning endeavor, so don't expect polished visuals
 
 But, I do hope that I will be able to create a fun, albeit short, little game in the end.
 
-# SETTING
+# THE GAME
+
+## Setting
 
 The setting will be a Science Fiction universe. The two main reasons for that are 1. Fantasy RPGs are in abundance and 2. If I get to create my own game art, I prefer Science Fiction Hard Surface style (for now).
 
-# ART STYLE
+## Art Style
 
 Pixelated, 2d, top down.
+
+# TECHNOLOGY STACK
+
+## Webpack
+
+Game Development (even for a small game) is much easier when working with a lot of fine grained modules and assets.
+To make development and deployment with loads of modules easier I use webpack on this project from the very beginningn, while keeping in mind the possibility that this game may grow.
+
+## Phaser 3
+
+From the various game frameworks out there this seems to have the most flexibility, good documentation and a large community. All reasons that make it very beginner friendly and so I went with it.
 
 # RESSOURCES
 
