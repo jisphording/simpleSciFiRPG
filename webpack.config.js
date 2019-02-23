@@ -1,13 +1,16 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        app: './src/index.js'
+        app: './src/index.js',
+        'dist-dependencies': ['phaser']
     },
 
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'app.bundle.js'
+        filename: '[name].bundle.js'
     },
 
     module: {
@@ -22,14 +25,34 @@ module.exports = {
                     }
                 }
             }
-        ]
+        ],
     },
+
+    plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, 'assets', '**', '*'),
+                to: path.resolve(__dirname, 'dist')
+            },
+        ]),
+
+        new webpack.optimize.SplitChunksPlugin({
+            name: 'dist-dependencies',
+            filename: 'dist-dependencies.bundle.js'
+        }),
+
+        // taken from a tutorial. But seems to work without it for now
+        // new webpack.DefinePlugin({
+        //     'typeof CANVAS_RENDERER': JSON.stringify(true),
+        //     'typeof WEBGL_RENDERER': JSON.stringify(true)
+        //  })
+    ],
 
     devServer: {
         // enable live reloading
         contentBase: path.resolve(__dirname, 'dist'),
         watchContentBase: true,
         compress: true,
-        port: 8080
-    }
+        port: 8080,
+    },
 };
