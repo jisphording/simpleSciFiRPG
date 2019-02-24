@@ -51,7 +51,13 @@ module.exports = {
         new CleanWebpackPlugin(['dist']),
         
         new HtmlWebpackPlugin({
-            title: 'Distribution'
+            title: 'SimpleSciFiRPG',
+            // Load a custom template (lodash by default see the FAQ for details)
+            template: './src/index.html',
+            hash: true,
+            files: {
+                css: ['./assets/css/main.css']
+            }
         }),
 
         // copying assets to the distribution folder as well
