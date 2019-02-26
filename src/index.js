@@ -1,4 +1,4 @@
-// BOOT SCENE
+// INDEX SCENE
 // -------------------------------------------------------------
 // This file contains the basic settings and configuration
 // for the Phaser project. They may in part be overwritten
