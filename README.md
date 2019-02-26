@@ -41,3 +41,5 @@ From the various game frameworks out there this seems to have the most flexibili
 A three part tutorial series that I used to get the first setup going. It does not explain the whys very well, but it is structured enough to follow along: https://gamedevacademy.org/how-to-create-a-turn-based-rpg-game-in-phaser-3-part-1/
 
 Setup a Webpack based development workflow for Phaser 3: https://snowbillr.github.io/blog/2018-04-09-a-modern-web-development-setup-for-phaser-3/
+
+Working with Scenes in Phaser 3 and ES6: https://phaser.io/phaser3/devlog/119
