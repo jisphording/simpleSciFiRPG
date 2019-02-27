@@ -3,6 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -67,6 +68,13 @@ module.exports = {
                 to: path.resolve(__dirname, 'dist')
             },
         ]),
+
+        // Google Workbox for Progressive Web Applications
+        new WorkboxPlugin.GenerateSW({
+            // thiese options encourage the ServiceWorkers to get in there fast
+            clientsClaim: true,
+            skipWaiting: true
+        }),
 
         // cache hashing based on content. If content doesn't change the hash stays the same
         new webpack.HashedModuleIdsPlugin({
