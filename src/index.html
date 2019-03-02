@@ -20,6 +20,24 @@
   <% } %>
 </head>
 <body>
+
+<!-- GAME USER INTERFACE -->
+<!------------------------------------------------------------------------>
+<!-- The user interface in this game is mostly used for slowly changing information that do not need to be repainted on every frame. And since HTML & CSS is the perfect fit for those information I try to source out as much as I can from phaser canvas to a DOM-Based interface */ -->
+
+<section class="game-interface">
+  <h1 class="game-ui">Welcome to Phaser!</h1>
+  <article class="game-ui description">
+      <p>Welcome to my first try at an interactive Phaser game project. This textarea will be used to display game content and player information that does not need to be updated in canvas 60 times a second...</p>
+  </article>
+  <article class="game-ui game-detail">
+    <p>Press the 'W' Key to start the game</p>
+  </article>
+</section>
+
+<!------------------------------------------------------------------------>
+<!-- END - GAME USER INTERFACE -->
+
 <% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
 <style>.unsupported-browser { display: none; }</style>
 <div class="unsupported-browser">
