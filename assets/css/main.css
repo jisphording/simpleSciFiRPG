@@ -1,0 +1,41 @@
+html {
+    background: #acacac;
+}
+
+body {
+    height: 100vh;
+    padding: 15vh 0;
+}
+
+canvas {
+    border: 4px solid #393939;
+    display: block;
+    margin: 0 auto;
+}
+
+/* GAME USER INTERFACE */
+/* ----------------------------------------------------------- */
+/* The user interface in this game is mostly used for slowly changing information
+that do not need to be repainted on every frame. And since HTML & CSS is the 
+perfect fit for those information I try to source out as much as I can from phaser
+canvas to a DOM-Based interface */
+.game-interface {
+    display: block;
+    margin: 0 auto 2rem auto;
+    width: 50%;
+}
+
+.game-ui {
+    background: #cecece;
+    margin: .5rem 0;
+    padding: .5rem 1rem;
+}
+
+.game-ui h1 {
+    font-family: courier;
+    margin: 0;
+    padding: 0;
+}
+.game-detail {
+    font-style: italic;
+}
