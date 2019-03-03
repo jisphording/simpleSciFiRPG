@@ -6,9 +6,14 @@
 
 import 'phaser';
 import { BootScene } from './scenes/boot';
-import { GameScene } from './scenes/game';
+import { ExitGame } from './scenes/exitGame';
+import { MainLoop } from './scenes/mainLoop';
 import { MenuScene } from './scenes/menu';
 import { UIScene } from './scenes/ui';
+
+import { Lvl01 } from './scenes/lvl-01';
+import { Lvl02 } from './scenes/lvl-02';
+import { Lvl03 } from './scenes/lvl-03';
 
 // The Phaser configuration for this project
 const gameConfig = {
@@ -25,9 +30,14 @@ const gameConfig = {
   },
   scene: [
     BootScene,
-    GameScene,
-    MenuScene,
-    UIScene
+    ExitGame,
+    MainLoop,
+    // MenuScene,
+    // UIScene,
+
+    Lvl01,
+    Lvl02,
+    Lvl03
   ]
 };
 
