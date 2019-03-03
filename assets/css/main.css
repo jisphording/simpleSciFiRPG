@@ -39,3 +39,20 @@ canvas to a DOM-Based interface */
 .game-detail {
     font-style: italic;
 }
+
+.game-detail p {
+    padding: .125rem .5rem;
+}
+
+/* Important Information Styling */
+.alert-green {
+    background: olivedrab;
+}
+
+/* Player & Game Statistics */
+ul, li {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
