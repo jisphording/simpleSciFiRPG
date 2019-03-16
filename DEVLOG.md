@@ -73,4 +73,6 @@ create () {
 
 - Sometimes a Texture Packer Export does not always cleanly exports transparency over to Tiled resulting in wrong cut tile borders. To repair that it is (most of the time) sufficient to just open the .json and make sure the affected tiles have the correct dimensions. If not, you can manually correct that here. 
 
+- Sometimes Texture Packer changes the tile dimensions on export. To remedy that just open the tile-sheet in Photoshop and scale it back to the original dimensions (without rearranging the tiles of course.)
+
 ----
