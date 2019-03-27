@@ -35,9 +35,15 @@ export class Lvl01 extends Phaser.Scene {
         this.backgroundLayer = this.tileMap.createStaticLayer('ground-walkable', this.tileSet);
         // Then adding additional layers // The X, Y here is starting from the top left corner
         this.tileMap.createStaticLayer('ground-impassable', this.tileSet, 0, 0);
-        this.tileMap.createStaticLayer('item-crates', this.tileSet, 0, 0);
+        // placing the collectable items
+        this.tileMap.createDynamicLayer('item-crates', this.tileSet, 0, 0);
+        // placing the player start
         this.tileMap.createStaticLayer('player-start', this.tileSet, 0, 0);
+        // placing the obstacles
         this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, 0, 0);
+
+        // Adding a navigation helper
+        this.add.text(25, 35, 'A', { font: fontBig, fill: colors });
 
         // I need a reference to this in the following function but do not know the proper way of achieving this yet
         let that = this;
