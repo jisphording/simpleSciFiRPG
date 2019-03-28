@@ -17,6 +17,19 @@ export class Lvl01 extends Phaser.Scene {
         this.load.image('environment-tiles', 'assets/images/tiles/environment-tiles.png');
         // loading the json data for the map created with Tiled Editor
         this.load.tilemapTiledJSON('lvl-01-map', 'assets/maps/lvl-01-map.json');
+
+        // loading the player character
+        // this.load.multiatlas('characters', 'assets/images/entities/player/player.json', 'assets/images/entities/player');
+        // our two characters
+        this.load.spritesheet('player', 'assets/images/entities/player/characters.png', { frameWidth: 16, frameHeight: 16 });
+    }
+
+    // sometimes the playercharacter moves randomly when we switch back from battlescene to worldscene. To top this we reset the keys in the wake function
+    wake () {
+        this.controls.left.reset();
+        this.controls.right.reset();
+        this.controls.up.reset();
+        this.controls.down.reset();
     }
 
     create () {
@@ -54,7 +67,48 @@ export class Lvl01 extends Phaser.Scene {
 
         // Constrain the camera so that does not move outside the tilemap.
         camera.setBounds( 0, 0, this.tileMap.widthInPixels, this.tileMap.heightInPixels);
+
+        // create the player character through our physics system
+        // this.player = this.add.sprite( 320, 240, 'characters', 'player_08.png' );
+        this.player = this.physics.add.sprite( 50, 100, 'player', 6)
+        this.player.setScale( 2, 2 );
+
+        // creating sprite animations to move the player character
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers( 'player', { frames: [1, 7, 1, 13]}),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers( 'player', { frames: [1, 7, 1, 13]}),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'up',
+            frames: this.anims.generateFrameNumbers( 'player', { frames: [2, 8, 2, 14]}),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'down',
+            frames: this.anims.generateFrameNumbers( 'player', { frames: [0, 6, 0, 12]}),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        // Don't allow the player to move out of the map
+        this.physics.world.bounds.width = this.tileMap.widthInPixels;
+        this.physics.world.bounds.height = this.tileMap.heightInPixelsM
+        this.player.setCollideWorldBounds( true );
         
+        // Don't allow walking on obstacles
+        this.physics.add.collider( this.player, this.wallLayer );
     }
 
     createLayers () {
@@ -86,6 +140,9 @@ export class Lvl01 extends Phaser.Scene {
         this.spawnLayer = this.tileMap.createStaticLayer('player-start', this.tileSet, x, y);
         // placing the obstacles
         this.obstacleLayer = this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, x, y);
+    
+        // Make all tiles on the wallLayer collidable
+        this.wallLayer.setCollisionByExclusion([-1]);
     }
 
     // creating collectable crates and items for the player
@@ -102,6 +159,64 @@ export class Lvl01 extends Phaser.Scene {
 
     update ( time, delta ) {
         // Apply the camera controls each tick
-        this.controls.update( delta );
+        // this.controls.update( delta );
+
+        // Moving the player character
+        // Horizontal Movement
+        if ( this.controls.left.isDown )
+        {
+            this.player.body.setVelocityX(-80);
+        }
+        else if ( this.controls.right.isDown )
+        {
+            this.player.body.setVelocityX(80);
+        }
+
+        // Stop the character from moving on X-Axi when no button is pressed
+        else
+        {
+            this.player.body.setVelocityX(0);
+        }
+
+        // Vertical movement
+        if ( this.controls.up.isDown )
+        {
+            this.player.body.setVelocityY(-80);
+        }
+        else if ( this.controls.down.isDown )
+        {
+            this.player.body.setVelocityY(80);
+        }
+
+        // Stop the character from moving on Y-Axis when no button is pressed
+        else
+        {
+            this.player.body.setVelocityY(0);
+        }
+
+        // Update the animation last and give left/right animations precedence over up/down animations
+        if ( this.controls.left.isDown )
+        {
+            this.player.anims.play('left', true);
+            this.player.flipX = true;
+        }
+        else if ( this.controls.right.isDown )
+        {
+            this.player.anims.play('right', true);
+            this.player.flipX = false;
+        }
+        else if ( this.controls.up.isDown )
+        {
+            this.player.anims.play('up', true);
+        }
+        else if ( this.controls.down.isDown )
+        {
+            this.player.anims.play('down', true);
+        }
+        else 
+        {
+            this.player.anims.stop();
+        }
+
     }
 }
