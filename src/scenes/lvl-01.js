@@ -36,6 +36,25 @@ export class Lvl01 extends Phaser.Scene {
         this.input.keyboard.on('keydown_A', function (event) {
             that.transition();
         });
+
+        // Accessing the main camera
+        const camera = this.cameras.main;
+
+        // Setup the arrow keys to control the camera
+        const cursors = this.input.keyboard.createCursorKeys();
+        
+        this.controls = new Phaser.Cameras.Controls.FixedKeyControl({
+            camera: camera,
+            left: cursors.left,
+            right: cursors.right,
+            up: cursors.up,
+            down: cursors.down,
+            speed: 0.5
+        });
+
+        // Constrain the camera so that does not move outside the tilemap.
+        camera.setBounds( 0, 0, this.tileMap.widthInPixels, this.tileMap.heightInPixels);
+        
     }
 
     createLayers () {
@@ -79,5 +98,10 @@ export class Lvl01 extends Phaser.Scene {
 
     transition () {
         this.scene.bringToTop('Lvl01');
+    }
+
+    update ( time, delta ) {
+        // Apply the camera controls each tick
+        this.controls.update( delta );
     }
 }
