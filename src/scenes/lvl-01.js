@@ -24,23 +24,8 @@ export class Lvl01 extends Phaser.Scene {
         let colors = RealtimeInterface.colors();
         let fontBig = RealtimeInterface.fontBig();
 
-        // Adding a navigation helper
-        this.add.text(25, 35, 'A', { font: fontBig, fill: colors });
-
-        // Creating the level from the tilemap - first pulling the json from above
-        this.tileMap = this.add.tilemap('lvl-01-map');
-        // Then connecting the json map from tiled with the tile-sheet image preloaded in phaser
-        this.tileSet = this.tileMap.addTilesetImage('environment-tiles', 'environment-tiles');
-        // Creating our Layers by assigning their keys/names from Tiled editor, starting with the background layer
-        this.backgroundLayer = this.tileMap.createStaticLayer('ground-walkable', this.tileSet);
-        // Then adding additional layers // The X, Y here is starting from the top left corner
-        this.tileMap.createStaticLayer('ground-impassable', this.tileSet, 0, 0);
-        // placing the collectable items
-        this.tileMap.createDynamicLayer('item-crates', this.tileSet, 0, 0);
-        // placing the player start
-        this.tileMap.createStaticLayer('player-start', this.tileSet, 0, 0);
-        // placing the obstacles
-        this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, 0, 0);
+        this.createLayers();
+        this.createCrates();
 
         // Adding a navigation helper
         this.add.text(25, 35, 'A', { font: fontBig, fill: colors });
@@ -51,6 +36,45 @@ export class Lvl01 extends Phaser.Scene {
         this.input.keyboard.on('keydown_A', function (event) {
             that.transition();
         });
+    }
+
+    createLayers () {
+        // setting the different level layers to build the map from
+        const x = 0;
+        const y = 0;
+
+        var layers = {
+            crateLayer: Phaser.Tilemaps.StaticTilemapLayer,
+            floorLayer: Phaser.Tilemaps.DynamicTilemapLayer,
+            obstacleLayer: Phaser.Tilemaps.StaticTilemapLayer,
+            spawnLayer: Phaser.Tilemaps.StaticTilemapLayer,
+            wallLayer: Phaser.Tilemaps.StaticTilemapLayer            
+        }
+
+        // Creating the level from the tilemap - first pulling the json from above
+        this.tileMap = this.add.tilemap('lvl-01-map');
+        // Then connecting the json map from tiled with the tile-sheet image preloaded in phaser
+        this.tileSet = this.tileMap.addTilesetImage('environment-tiles', 'environment-tiles');
+        
+        
+        // Creating our Layers by assigning their keys/names from Tiled editor, starting with the background layer
+        this.floorLayer = this.tileMap.createDynamicLayer('ground-walkable', this.tileSet);
+        // Then adding additional layers // The X, Y here is starting from the top left corner
+        this.wallLayer = this.tileMap.createStaticLayer('ground-impassable', this.tileSet, x, y);
+        // placing the collectable items
+        this.crateLayer = this.tileMap.createStaticLayer('item-crates', this.tileSet, x, y);
+        // placing the player start
+        this.spawnLayer = this.tileMap.createStaticLayer('player-start', this.tileSet, x, y);
+        // placing the obstacles
+        this.obstacleLayer = this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, x, y);
+    }
+
+    // creating collectable crates and items for the player
+    createCrates () {
+    }
+
+    // getTiles is used to filter out all tiles of the tilemap layer that it is run against
+    getTiles() {
     }
 
     transition () {
