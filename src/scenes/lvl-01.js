@@ -68,9 +68,11 @@ export class Lvl01 extends Phaser.Scene {
         // Constrain the camera so that does not move outside the tilemap.
         camera.setBounds( 0, 0, this.tileMap.widthInPixels, this.tileMap.heightInPixels);
 
+        // Spawn the player
+        const spawnPoint = this.tileMap.findObject("player-start", obj => obj.name === "playerSpawn");
+
         // create the player character through our physics system
-        // this.player = this.add.sprite( 320, 240, 'characters', 'player_08.png' );
-        this.player = this.physics.add.sprite( 50, 100, 'player', 6)
+        this.player = this.physics.add.sprite( spawnPoint.x, spawnPoint.y, 'player', 6);
         this.player.setScale( 2, 2 );
 
         // creating sprite animations to move the player character
@@ -109,20 +111,13 @@ export class Lvl01 extends Phaser.Scene {
         
         // Don't allow walking on obstacles
         this.physics.add.collider( this.player, this.wallLayer );
+
     }
 
     createLayers () {
         // setting the different level layers to build the map from
         const x = 0;
         const y = 0;
-
-        var layers = {
-            crateLayer: Phaser.Tilemaps.StaticTilemapLayer,
-            floorLayer: Phaser.Tilemaps.DynamicTilemapLayer,
-            obstacleLayer: Phaser.Tilemaps.StaticTilemapLayer,
-            spawnLayer: Phaser.Tilemaps.StaticTilemapLayer,
-            wallLayer: Phaser.Tilemaps.StaticTilemapLayer            
-        }
 
         // Creating the level from the tilemap - first pulling the json from above
         this.tileMap = this.add.tilemap('lvl-01-map');
@@ -136,8 +131,6 @@ export class Lvl01 extends Phaser.Scene {
         this.wallLayer = this.tileMap.createStaticLayer('ground-impassable', this.tileSet, x, y);
         // placing the collectable items
         this.crateLayer = this.tileMap.createStaticLayer('item-crates', this.tileSet, x, y);
-        // placing the player start
-        this.spawnLayer = this.tileMap.createStaticLayer('player-start', this.tileSet, x, y);
         // placing the obstacles
         this.obstacleLayer = this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, x, y);
     
