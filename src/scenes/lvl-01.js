@@ -18,6 +18,9 @@ export class Lvl01 extends Phaser.Scene {
         // loading the json data for the map created with Tiled Editor
         this.load.tilemapTiledJSON('lvl-01-map', 'assets/maps/lvl-01-map.json');
 
+        // Loading individual sprites. Should be refactored to use spritesheet in the future
+        this.load.image('grass-patch', 'assets/images/tiles/grass-patch.png');
+
         // loading the player character
         // this.load.multiatlas('characters', 'assets/images/entities/player/player.json', 'assets/images/entities/player');
         // our two characters
@@ -38,7 +41,7 @@ export class Lvl01 extends Phaser.Scene {
         let fontBig = RealtimeInterface.fontBig();
 
         this.createLayers();
-        this.createCrates();
+        this.getTrigger();
 
         // Adding a navigation helper
         this.add.text(25, 35, 'A', { font: fontBig, fill: colors });
@@ -74,6 +77,10 @@ export class Lvl01 extends Phaser.Scene {
         // create the player character through our physics system
         this.player = this.physics.add.sprite( spawnPoint.x, spawnPoint.y, 'player', 6);
         this.player.setScale( 2, 2 );
+
+        // Make camera follow the player
+        camera.startFollow(this.player);
+        camera.roundPixels = true; // avoid tile bleed
 
         // creating sprite animations to move the player character
         this.anims.create({
@@ -124,7 +131,6 @@ export class Lvl01 extends Phaser.Scene {
         // Then connecting the json map from tiled with the tile-sheet image preloaded in phaser
         this.tileSet = this.tileMap.addTilesetImage('environment-tiles', 'environment-tiles');
         
-        
         // Creating our Layers by assigning their keys/names from Tiled editor, starting with the background layer
         this.floorLayer = this.tileMap.createDynamicLayer('ground-walkable', this.tileSet);
         // Then adding additional layers // The X, Y here is starting from the top left corner
@@ -132,7 +138,7 @@ export class Lvl01 extends Phaser.Scene {
         // placing the collectable items
         this.crateLayer = this.tileMap.createStaticLayer('item-crates', this.tileSet, x, y);
         // placing the obstacles
-        this.obstacleLayer = this.tileMap.createStaticLayer('obstacle-pond', this.tileSet, x, y);
+        this.obstacleLayer = this.tileMap.createDynamicLayer('obstacle-pond', this.tileSet, x, y);
     
         // Make all tiles on the wallLayer collidable
         this.wallLayer.setCollisionByExclusion([-1]);
@@ -142,12 +148,41 @@ export class Lvl01 extends Phaser.Scene {
     createCrates () {
     }
 
-    // getTiles is used to filter out all tiles of the tilemap layer that it is run against
-    getTiles() {
+    // getTrigger is used to filter out all tiles of the tilemap layer that it is run against
+    getTrigger() {
+        // Creating a physics group to collide the player against obstacles to trigger events
+        this.triggerGroup = this.physics.add.staticGroup();
+
+        // Loop over each Tile
+        this.obstacleLayer.forEachTile(tile => {
+            if ( tile.index > 0 ) { // where to look up the actual tile index?
+                // A sprite has it's origin at the center, so we place the sprite at the center of the tie
+                const x = tile.getCenterX();
+                const y = tile.getCenterY();
+                const trigger = this.triggerGroup.create( x, y, 'grass-patch');
+
+                // The map has spike tiles that have been rotated in Tiled ("z" key), so parse out that angle
+                // to the correct body placement
+                trigger.rotation = tile.rotation;
+                if ( trigger.angle === 0 ) trigger.body;
+                else if ( trigger.angle === -90 ) trigger.body;
+                else if ( trigger.angle === 90 ) trigger.body;
+
+                // Remove the original tile from the layer
+                this.obstacleLayer.removeTileAt( tile.x, tile.y );
+            }
+        });
     }
 
     transition () {
         this.scene.bringToTop('Lvl01');
+    }
+
+    // freezing the player
+    freezePlayer () {
+        // set Player Velocity to Zero
+        this.player.body.velocity.x = 0;
+        this.player.body.velocity.y = 0;
     }
 
     update ( time, delta ) {
@@ -165,7 +200,7 @@ export class Lvl01 extends Phaser.Scene {
             this.player.body.setVelocityX(80);
         }
 
-        // Stop the character from moving on X-Axi when no button is pressed
+        // Stop the character from moving on X-Axis when no button is pressed
         else
         {
             this.player.body.setVelocityX(0);
@@ -211,5 +246,42 @@ export class Lvl01 extends Phaser.Scene {
             this.player.anims.stop();
         }
 
+        // Check for player Collision with obstacle Triggers
+        if (
+            this.player.y > this.obstacleLayer.height ||
+            this.physics.world.overlap(this.player, this.triggerGroup)
+        ) {
+
+            // Flag that the player is dead, so that we can stop update from running
+            this.isPlayerDead = true;
+
+            // Make it a little more visible and dramatic for the player
+            this.cameras.main.shake( 100, 0.1 );
+            this.cameras.main.fade( 250, 0, 0, 0);
+            // Freeze the player to leave them on screen while fading
+            this.freezePlayer();
+
+            this.cameras.main.once( 'camerafadeoutcomplete', () => {
+                // Disable keyboard input
+                this.input.keyboard.enabled = false;
+
+                // this.player.destroy();
+
+                // Restart the scene
+                this.scene.restart();
+
+                // Re-enable keyboard input after  a second
+                // currently this seems a little bit overkill to use a callback and it's own variable
+                // for that. This should probably be refactored further down the road
+                var keyboardRef = this.input.keyboard;
+                function callback () {
+                    return function () {
+                        keyboardRef.enabled = true;
+                    }
+                }
+
+                setTimeout(callback( ), 1000);
+            });
+        }
     }
 }
