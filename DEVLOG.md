@@ -5,6 +5,14 @@
 
 ----
 
+## Modularizing your code
+
+*Modular code makes it much easier to build and maintain reusable blocks of code. While the basic idea sounds simple, actually getting it to work in a good manner is not that easy. But since in my eyes the advantages far outweigh the overhead of getting modules to work I thought why not give it a shot. This is a learning project anyways.*
+
+Ressources: [Eloquent Javascript: Chapter 10 - Modules](https://eloquentjavascript.net/10_modules.html)
+
+----
+
 ## Getting Tilemaps into Phaser 3
 
 *To create the tilemaps for the project I chose to work with Photoshop for creating the tiles, Texture Packer for packing them up into a compact Sprite Sheet and Tiled to create a Map from that Sprite Sheet.*
