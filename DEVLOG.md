@@ -76,3 +76,14 @@ create () {
 - Sometimes Texture Packer changes the tile dimensions on export. To remedy that just open the tile-sheet in Photoshop and scale it back to the original dimensions (without rearranging the tiles of course.)
 
 ----
+
+## Filtering out Tiles from a Tilemap created in Tile
+
+To aid in map creation I am using the [Tiled Map Editor](https://www.mapeditor.org/) which makes the process much easier by providing a visual interface, different objects/layers and a handy way of exporting JSON to be used in Phaser. 
+
+Getting the basic map loaded from JSON by Phaser works so far. But I have difficulties dynamically filtering out the spawn point tile from a Tiled layer as shown here in the [Sokoban remake tutorial](https://www.crazygames.com/blog/2018/10/24/Sokoban-Series-Part-2-Creating-an-Interactive-Level/). 
+
+I have read up on the issue in the [Phaser Devlog](https://phaser.io/phaser3/devlog/108), but do not yet fully understand the implications of why it's not working. To go around this issue for now I have used the solution from [Michael Hadleys Modular Game Worlds Series](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6) and converted the player Spawn from a tile-layer into an object layer. 
+This is working find for the time being, but I'll probably have to get back to the solution of filtering out tiles from a tile layer anyway.
+
+----
