@@ -1,9 +1,10 @@
 // LEVEL 01
-// -------------------------------------------------------------
+// ---------------------------------------------------------------------------------------- //
 // This file contains the first level
 
-// loading fonts and colors
+// importing necessary modules
 import { RealtimeInterface } from '../utils/realtimeInterface';
+import { Player } from '../entities/player.js';
 
 export class Lvl01 extends Phaser.Scene {
 
