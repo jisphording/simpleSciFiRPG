@@ -21,10 +21,11 @@ const gameConfig = {
   type: Phaser.WEBGL,
   pixelArt: true, // no Antialiasing
   width: 640, // resolution-x
-  height: 480, // resolution-y
+  height: 480, // resolution-y // corresponds with tile-sizing
   physics: {
     default: 'arcade',
     arcade: {
+      gravity: { y: 0 }, // Top down game, so no gravity on y-axis
       debug: true
     }
   },
@@ -46,12 +47,12 @@ const game = new Phaser.Game(gameConfig);
 // SETUP PWA - PROGRESSIVE WEP APPLICATION
 
 // Registering a service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
-  });
-}
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker.register('/service-worker.js').then(registration => {
+//       console.log('SW registered: ', registration);
+//     }).catch(registrationError => {
+//       console.log('SW registration failed: ', registrationError);
+//     });
+//   });
+// }
